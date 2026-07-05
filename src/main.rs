@@ -1,29 +1,41 @@
 mod core;
 
-use clap::{Parser, Subcommand};
+use clap::Parser;
+use std::fs::File;
+use std::io::Write;
 
 #[derive(Parser)]
 struct Cli {
-    #[command(subcommand)]
-    command: Commands,
-}
+    size: String,
 
-#[derive(Subcommand)]
-enum Commands {
-    Generate { size: u32 },
-    Version,
+    mode: Option<String>,
 }
 
 fn main() {
     let cli = Cli::parse();
 
-    match cli.command {
-        Commands::Generate { size } => {
-            println!("{}", core::generate(size));
-        }
+    if cli.size == "version" {
+        println!("rustcrypt 0.1.0");
+        println!("Safe, Fast, Cryptographic.");
+        return;
+    }
 
-        Commands::Version => {
-            println!("rustcrypt 0.2.0");
-        }
+    let size: usize = cli.size.parse().unwrap_or(32);
+    let output = core::generate(size);
+
+    let mode = cli.mode.unwrap_or_else(|| "text".to_string());
+
+    if mode == "json" {
+        let json = serde_json::json!({
+            "output": output,
+            "length": size
+        });
+
+        let mut file = File::create("output.json").unwrap();
+        file.write_all(json.to_string().as_bytes()).unwrap();
+
+        println!("{}", json);
+    } else {
+        println!("{}", output);
     }
 }
