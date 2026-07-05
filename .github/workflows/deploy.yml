@@ -14,16 +14,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: dtolnay/rust-toolchain@stable
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
 
-      - run: cargo run -- version
+      - name: Build and generate output.json
+        run: cargo run -- 32 json
 
-      - run: |
-          mkdir public
+      - name: Prepare public folder
+        run: |
+          mkdir -p public
           cp index.html public/
           cp output.json public/
 
-      - uses: peaceiris/actions-gh-pages@v4
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
