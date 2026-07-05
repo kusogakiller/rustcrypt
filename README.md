@@ -24,6 +24,16 @@ Safe. Fast. Cryptographic.
 
 ---
 
-## License
+## Usage
 
-CC0-1.0
+Generate a cryptographic output from high-entropy randomness.
+
+```bash
+# 32-byte output
+rustcrypt generate 32
+
+# 64-byte output
+rustcrypt generate 64
+
+# version info
+rustcrypt version
