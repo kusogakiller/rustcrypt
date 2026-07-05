@@ -163,8 +163,8 @@ function copy(text){
 }
 
 function load(){
-  setStatus("loading...");
-  document.getElementById("out").innerHTML = "<small>fetching...</small>";
+  setStatus("Generating...");
+  document.getElementById("out").innerHTML = "<small>Fetching...</small>";
 
   fetch("output.json?ts=" + Date.now())
     .then(r => r.json())
