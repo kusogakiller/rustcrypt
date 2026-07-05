@@ -4,35 +4,54 @@
 
 ## Overview
 
-RustCrypt is a lightweight cryptographic utility for generating secure, entropy-based keys and passwords.
+RustCrypt is a simple CLI tool that generates fixed-length hexadecimal strings from random data using BLAKE3 hashing.
 Built with Rust for safety, speed, and cryptographic security.
 
 ---
 
 ## Features
 
-- High-entropy random generation
-- Secure cryptographic hashing pipeline
-- Minimal CLI interface
+- BLAKE3 hash-based output
+- Simple CLI interface
 - Zero unnecessary dependencies
 
 ---
 
 ## Philosophy
 
-Safe. Fast. Cryptographic.
+Safe, Fast, Cryptographic.
 
 ---
+
+## Installation
+
+### Build from source
+
+```bash
+git clone https://github.com/kusogakiller/rustcrypt
+cd rustcrypt
+cargo build --release
+```
+
+### Run directly
+
+```bash
+cargo run -- 32
+```
+
+### Install globally (optional)
+
+```bash
+cargo install --path .
+```
+
+---  
 
 ## Usage
 
-RustCrypt provides a simple CLI for generating cryptographic outputs based on high-entropy randomness.
+You can generate a 32-character or 64-character cryptographic hash.
 
 ---
-
-### Generate output
-
-You can generate a 32-character or 64-character cryptographic hash.
 
 #### version info
 ```bash
