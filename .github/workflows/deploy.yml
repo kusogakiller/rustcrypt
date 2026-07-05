@@ -21,11 +21,17 @@ jobs:
       - name: Build JSON output
         run: cargo run -- 64 json
 
-      - name: Debug files
-        run: ls -R
+      - name: Prepare site
+        run: |
+          mkdir -p dist
+          cp index.html dist/
+          cp output.json dist/ || true
 
-      - name: Deploy to GitHub Pages
+      - name: Debug
+        run: ls -R dist
+
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
+          publish_dir: dist
