@@ -12,22 +12,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Build and generate output.json
-        run: cargo run -- 32 json
+      - name: Build JSON output
+        run: cargo run -- 64 json
 
-      - name: Prepare public folder
-        run: |
-          mkdir -p public
-          cp index.html public/
-          cp output.json public/
+      - name: Debug files
+        run: ls -R
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          publish_dir: .
