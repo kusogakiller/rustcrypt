@@ -1,17 +1,20 @@
 use rand::RngCore;
 use blake3;
-use hex;
 
-pub fn generate(size: usize) -> String {
-    let mut raw = vec![0u8; size];
-    rand::thread_rng().fill_bytes(&mut raw);
+pub fn generate(hex_len: usize) -> String {
+    let byte_len = (hex_len + 1) / 2;
 
-    let hash = blake3::hash(&raw);
-    let hex = hash.to_hex().to_string();
+    let mut input = [0u8; 32];
+    rand::thread_rng().fill_bytes(&mut input);
 
-    match size {
-        32 => hex[..32].to_string(),
-        64 => hex[..64].to_string(),
-        _ => hex[..32].to_string(),
-    }
+    let mut output = vec![0u8; byte_len];
+
+    blake3::Hasher::new()
+        .update(&input)
+        .finalize_xof()
+        .fill(&mut output);
+
+    let hex = hex::encode(output);
+
+    hex[..hex_len.min(hex.len())].to_string()
 }
