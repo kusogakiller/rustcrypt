@@ -133,7 +133,7 @@ footer{
   <div class="row">
     <button onclick="load()">Generate!</button>
     <button class="secondary" onclick="clearOut()">Clear</button>
-    <small id="status">idle</small>
+    <small id="status">Idle</small>
   </div>
 
   <div class="section" id="out">
@@ -170,7 +170,7 @@ function load(){
   fetch("output.json?ts=" + Date.now())
     .then(r => r.json())
     .then(d => {
-      setStatus("done");
+      setStatus("Done!");
 
       document.getElementById("out").innerHTML = `
         <div class="grid">
