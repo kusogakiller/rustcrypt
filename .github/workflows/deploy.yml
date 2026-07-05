@@ -17,8 +17,11 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Build output
-        run: cargo run -- 64 json
+      - name: Build release
+        run: cargo build --release
+
+      - name: Generate output
+        run: ./target/release/rustcrypt 64 json
 
       - name: Prepare dist
         run: |
