@@ -2,7 +2,7 @@ name: deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 permissions:
   contents: write
@@ -18,20 +18,24 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Build JSON output
+      - name: Build output (RustCrypt)
         run: cargo run -- 64 json
 
-      - name: Prepare site
+      - name: Prepare site directory
         run: |
-          mkdir -p dist
+          rm -rf dist
+          mkdir dist
           cp index.html dist/
           cp output.json dist/ || true
 
-      - name: Debug
-        run: ls -R dist
+      - name: Verify build output
+        run: |
+          echo "=== dist contents ==="
+          ls -R dist
 
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: dist
+          force_orphan: true
