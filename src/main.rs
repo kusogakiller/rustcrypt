@@ -45,8 +45,4 @@ fn main() {
         println!("size: {}", size);
         println!("output: {}", output);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 6b7a9e783517b6ea6968cbca97d098254d38e34b
