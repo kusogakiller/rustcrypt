@@ -4,14 +4,14 @@
 
 ## Overview
 
-RustCrypt is a CLI tool that generates fixed-length hexadecimal strings using BLAKE3 hashing.
+RustCrypt is a CLI tool that generate fixed-length cryptographic strings using BLAKE3 XOF.
 Built with Rust for safety, speed, and cryptographic security.
 
 ---
 
 ## Features
 
-- BLAKE3 hash-based output
+- BLAKE3 XOF hash-based output
 - Simple CLI interface
 - Zero unnecessary dependencies
 
