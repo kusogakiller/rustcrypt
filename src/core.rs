@@ -17,4 +17,8 @@ pub fn generate(hex_len: usize) -> String {
     let hex = hex::encode(output);
 
     hex[..hex_len.min(hex.len())].to_string()
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 6b7a9e783517b6ea6968cbca97d098254d38e34b
