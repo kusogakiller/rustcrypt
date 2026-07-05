@@ -170,7 +170,9 @@ function load(){
   setStatus("Generating...");
   document.getElementById("out").innerHTML = "<small>Fetching...</small>";
 
-  fetch("output.json?ts=" + Date.now())
+  const size = 32; // or 64（後でUI化可能）
+
+  fetch(`http://127.0.0.1:3000/generate/${size}`)
     .then(r => r.json())
     .then(d => {
       setStatus("Done!");
@@ -179,18 +181,11 @@ function load(){
         <div class="grid">
 
           <div>
-            <div class="label">SHA-256 (Base64 Encoded)</div>
-            <code>${d.base64}</code>
-            <div class="row">
-              <button class="secondary" onclick="copy('${d.base64}')">Copy</button>
-            </div>
-          </div>
+            <div class="label">RustCrypt Output (${size})</div>
+            <code>${d.output}</code>
 
-          <div>
-            <div class="label">RIPEMD-128 (HEX Encoded)</div>
-            <code>${d.ripemd128}</code>
             <div class="row">
-              <button class="secondary" onclick="copy('${d.ripemd128}')">Copy</button>
+              <button class="secondary" onclick="copy('${d.output}')">Copy</button>
             </div>
           </div>
 
@@ -198,9 +193,10 @@ function load(){
       `;
     })
     .catch(err => {
+      console.log(err);
       setStatus("error");
       document.getElementById("out").innerHTML =
-        "<small>Error: Failed to load output.json</small>";
+        "<small>Error: Failed to connect API</small>";
     });
 }
 </script>
