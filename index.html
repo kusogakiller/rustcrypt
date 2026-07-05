@@ -1,60 +1,205 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>RustCrypt</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RustCrypt</title>
 
-  <style>
-    body {
-      font-family: sans-serif;
-      max-width: 600px;
-      margin: 40px auto;
-    }
+<style>
+:root{
+  --bg:#f6f7f9;
+  --card:#ffffff;
+  --text:#111827;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --accent:#111827;
+}
 
-    button {
-      padding: 10px 20px;
-      margin-top: 20px;
-      cursor: pointer;
-    }
+*{box-sizing:border-box;}
 
-    code {
-      display: block;
-      padding: 8px;
-      background: #f4f4f4;
-      word-break: break-all;
-    }
-  </style>
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.5;
+}
+
+.container{
+  max-width:900px;
+  margin:0 auto;
+  padding:64px 24px;
+}
+
+header{
+  margin-bottom:40px;
+}
+
+h1{
+  font-size:40px;
+  margin:0 0 8px;
+  letter-spacing:-0.02em;
+}
+
+p.subtitle{
+  color:var(--muted);
+  margin:0;
+  font-size:15px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+}
+
+.row{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+button{
+  border:1px solid var(--border);
+  background:var(--text);
+  color:white;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:500;
+  transition:.15s;
+}
+
+button:hover{
+  opacity:.9;
+  transform:translateY(-1px);
+}
+
+button.secondary{
+  background:white;
+  color:var(--text);
+}
+
+small{
+  color:var(--muted);
+}
+
+.section{
+  margin-top:20px;
+}
+
+.label{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+code{
+  display:block;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:#fafafa;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  word-break:break-all;
+  font-size:13px;
+}
+
+.grid{
+  display:grid;
+  gap:16px;
+}
+
+footer{
+  margin-top:40px;
+  font-size:12px;
+  color:var(--muted);
+}
+</style>
 </head>
 
 <body>
+<div class="container">
 
+<header>
   <h1>RustCrypt</h1>
+  <p class="subtitle">Secure entropy-based password generation in Rust.</p>
+</header>
 
-  <h3>Secure entropy-based password generation in Rust.</h3>
+<div class="card">
 
-  <button onclick="load()">Generate!</button>
+  <div class="row">
+    <button onclick="load()">Generate!</button>
+    <button class="secondary" onclick="clearOut()">Clear</button>
+    <small id="status">idle</small>
+  </div>
 
-  <hr>
+  <div class="section" id="out">
+    <small>Click generate to fetch output.json</small>
+  </div>
 
-  <script>
-    function load() {
-      document.getElementById("out").innerHTML = "Generating...";
+</div>
 
-      fetch("output.json?ts=" + Date.now())
-        .then(r => r.json())
-        .then(d => {
-          document.getElementById("out").innerHTML = `
-            <h3>Generated Result</h3>
+<footer>
+  Open-source CLI tool UI mock. No frameworks.
+</footer>
 
-            <p><b>Base64</b></p>
+</div>
+
+<script>
+function setStatus(t){
+  document.getElementById("status").innerText = t;
+}
+
+function clearOut(){
+  document.getElementById("out").innerHTML =
+    "<small>Cleared</small>";
+}
+
+function copy(text){
+  navigator.clipboard.writeText(text);
+}
+
+function load(){
+  setStatus("loading...");
+  document.getElementById("out").innerHTML = "<small>fetching...</small>";
+
+  fetch("output.json?ts=" + Date.now())
+    .then(r => r.json())
+    .then(d => {
+      setStatus("done");
+
+      document.getElementById("out").innerHTML = `
+        <div class="grid">
+
+          <div>
+            <div class="label">Base64</div>
             <code>${d.base64}</code>
+            <div class="row">
+              <button class="secondary" onclick="copy('${d.base64}')">Copy</button>
+            </div>
+          </div>
 
-            <p><b>RIPEMD-128</b></p>
+          <div>
+            <div class="label">RIPEMD-128</div>
             <code>${d.ripemd128}</code>
-          `;
-        });
-    }
-  </script>
+            <div class="row">
+              <button class="secondary" onclick="copy('${d.ripemd128}')">Copy</button>
+            </div>
+          </div>
+
+        </div>
+      `;
+    })
+    .catch(err => {
+      setStatus("error");
+      document.getElementById("out").innerHTML =
+        "<small>failed to load output.json</small>";
+    });
+}
+</script>
 
 </body>
 </html>
