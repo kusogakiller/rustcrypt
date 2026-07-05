@@ -92,6 +92,17 @@ footer{
   font-size:12px;
   color:var(--muted);
 }
+
+h1 {
+  margin: 0 0 14px;
+  font-size: 38px;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
 </style>
 </head>
 
@@ -100,17 +111,21 @@ footer{
 <div class="container">
 
 <h1>RustCrypt</h1>
-<div class="subtitle">RustCrypt is a CLI tool that generates fixed-length hexadecimal strings using BLAKE3 hashing.</div>
-<div class="subtitle">Built with Rust for safety, speed, and cryptographic security.</div>
+
+<div class="subtitle">
+Generate fixed-length hashes from CLI output (BLAKE3-based).<br>
+Built with Rust for safety, speed, and cryptographic security.
+</div>
 
 <div class="row">
-  <button onclick="load()">Refresh</button>
+  <button onclick="generate(32)">Generate 32-characters hash</button>
+  <button onclick="generate(64)">Generate 64-characters hash</button>
   <button class="secondary" onclick="clearOut()">Clear</button>
   <small id="status">Idle</small>
 </div>
 
 <div id="out" class="card" style="margin-top:16px;">
-  <small>Click Refresh</small>
+  <small>Select 32 or 64</small>
 </div>
 
 <footer>
@@ -129,27 +144,25 @@ function clearOut(){
     "<small>Cleared</small>";
 }
 
-function load(){
-  setStatus("Loading...");
+function generate(size){
+  setStatus("Generating " + size + "...");
+
   document.getElementById("out").innerHTML =
     "<small>Loading output.json...</small>";
 
-  fetch("output.json?ts=" + Date.now())
+  fetch("output.json?size=" + size + "&ts=" + Date.now())
     .then(r => r.json())
     .then(d => {
       setStatus("Done");
-
-      const output = d.output ?? "";
-      const length = d.length ?? "";
 
       document.getElementById("out").innerHTML = `
         <div>
 
           <div class="label">Generated Output</div>
-          <pre>${output}</pre>
+          <pre>${d.output ?? ""}</pre>
 
           <div class="label">Length</div>
-          <pre>${length}</pre>
+          <pre>${d.length ?? ""}</pre>
 
         </div>
       `;
@@ -157,7 +170,7 @@ function load(){
     .catch(() => {
       setStatus("Error");
       document.getElementById("out").innerHTML =
-        "<small>Failed to load output.json</small>";
+        "<small>output.json not found. Run CLI first.</small>";
     });
 }
 </script>
