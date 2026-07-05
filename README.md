@@ -5,7 +5,6 @@
 ## Overview
 
 RustCrypt is a lightweight cryptographic utility for generating secure, entropy-based keys and passwords.
-
 Built with Rust for safety, speed, and cryptographic security.
 
 ---
