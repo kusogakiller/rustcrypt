@@ -43,7 +43,9 @@ rustcrypt generate 32
 Example:
 5ee56aa15401224d21694ae4740e1e8e
 ```
+
 ---
+
 #### 64-byte output
 ```bash
 rustcrypt generate 64
